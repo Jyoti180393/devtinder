@@ -4,6 +4,35 @@ const express = require("express");
 
 const app = express();
 
+// now all the http methods are available on the app instance
+// to handle the request on different routes
+// app.use("/user", (req, res) => {
+//   res.send("Hello from the .use /user route!");
+// });
+
+app.get("/user", (req, res) => {
+  res.send("Hello from the .get /user route!");
+});
+
+app.post("/user", (req, res) => {
+  res.send("Hello from the .post /user route!");
+});
+
+app.delete("/user", (req, res) => {
+  res.send("Hello from the .delete /user route!");
+});
+
+/*
+app.use("/hello/2", (req, res) => {
+  res.send("Hello from the /hello/2 route!");
+});
+
+// if the request is before above route, it will be executed
+// and will not reach the above route
+app.use("/hello", (req, res) => {
+  res.send("Hello from the /hello route!");
+});
+
 // this is request handler to handle the request on different route
 app.use("/test", (req, res) => {
   res.send("Hello from the /test route!");
@@ -16,6 +45,7 @@ app.use("/test", (req, res) => {
 app.use("/", (req, res) => {
   res.send("Hello from the server!");
 });
+*/
 
 // request listener to listen to the request on port 7777
 app.listen(7777, () => {
