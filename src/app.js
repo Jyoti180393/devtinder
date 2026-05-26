@@ -4,48 +4,39 @@ const express = require("express");
 
 const app = express();
 
-// now all the http methods are available on the app instance
-// to handle the request on different routes
-// app.use("/user", (req, res) => {
-//   res.send("Hello from the .use /user route!");
+// below routes are not valid in Express 5 route strings.
+// /x(y)?z" matches "/xz" and "/xyz", but not "/x(y)?z".
+// /xy+z matches "/xyz", "/xyyz", "/xyyyz", and so on,
+//   but not "/xz" or "/x(y)?z".
+// /xy*z matches "/xz", "/xyz", "/xyyz", "/xyyyz", and so on,
+//   but not "/x(y)?z" or "/x(y)?z".
+// /x(ya)?*z matches "/xz", "/xyz", "/xyaaaaz", and so on,
+//   but not "/x(y)?z" or "/x(y)?z".
+
+// app.get("/x(ya)?*z", (req, res) => {
+//   res.send("Hello World");
 // });
 
+// /.*fly$/ matches any path that ends with "fly", such as "/butterfly", "/dragonfly", and so on,
+//  but not "/fly" or "/flying".
+app.get(/.*fly$/, (req, res) => {
+  res.send("Hello from /*fly");
+});
+
+// listening to query parameters in the URL
+
 app.get("/user", (req, res) => {
-  res.send("Hello from the .get /user route!");
+  console.log(req.query);
+  res.send(
+    "Query - /user:  " + req.query.userId + " with name " + req.query.name,
+  );
 });
 
-app.post("/user", (req, res) => {
-  res.send("Hello from the .post /user route!");
+// listening to dynamic parameters in the URL
+app.get("/user/:id/:name", (req, res) => {
+  console.log(req.params);
+  res.send("Params - /user: " + req.params.name + " with id " + req.params.id);
 });
-
-app.delete("/user", (req, res) => {
-  res.send("Hello from the .delete /user route!");
-});
-
-/*
-app.use("/hello/2", (req, res) => {
-  res.send("Hello from the /hello/2 route!");
-});
-
-// if the request is before above route, it will be executed
-// and will not reach the above route
-app.use("/hello", (req, res) => {
-  res.send("Hello from the /hello route!");
-});
-
-// this is request handler to handle the request on different route
-app.use("/test", (req, res) => {
-  res.send("Hello from the /test route!");
-});
-
-// fallback for all other routes
-// have to be defined at the end of all the routes to avoid overriding the other routes
-// if defined before the other routes, it will override all the other routes
-// and will be executed for all the requests
-app.use("/", (req, res) => {
-  res.send("Hello from the server!");
-});
-*/
 
 // request listener to listen to the request on port 7777
 app.listen(7777, () => {
