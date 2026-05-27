@@ -8,3 +8,6 @@ For tracking the feature and work updates for the project
 - Explored Http methods get, post , delete
 - Explored advance routes like ?, +, (), \* and regex
 - Explored route params and query
+- Multiple route handlers
+- Explore the concept of next()
+-
