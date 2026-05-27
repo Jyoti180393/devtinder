@@ -25,6 +25,7 @@ app.use(
     //  timeout error will be thrown in the console
   },
   [
+    // can group multiple handlers in an array and use it in the route
     (req, res, next) => {
       next();
       console.log("User route handler 2 is called");
