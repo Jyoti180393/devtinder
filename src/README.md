@@ -10,4 +10,4 @@ For tracking the feature and work updates for the project
 - Explored route params and query
 - Multiple route handlers
 - Explore the concept of next()
--
+- Explored middlewares
