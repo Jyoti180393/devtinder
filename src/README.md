@@ -11,3 +11,4 @@ For tracking the feature and work updates for the project
 - Multiple route handlers
 - Explore the concept of next()
 - Explored middlewares
+- created auth middleware for /admin and /user
