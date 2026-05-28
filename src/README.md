@@ -14,3 +14,4 @@ For tracking the feature and work updates for the project
 - created auth middleware for /admin and /user
 - Insatlled Mongoose
 - Connect Database ,added schema and model and data to DB
+- Added post api with dynamic data (req.body data )

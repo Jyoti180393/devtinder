@@ -9,24 +9,20 @@ const connectDb = require("./config/database");
 const app = express();
 const User = require("./models/user");
 
-app.post("/signup", async (req, res) => {
-  const userObj = {
-    firstName: "Jyoti",
-    lastName: "Pokharia",
-    email: "Jyoti@gmail.com",
-    password: "Jyoti@123",
-    age: 30,
-    gender: "Female",
-  };
-  // Creating new instance of User model
-  const user = new User(userObj);
+app.use(express.json());
+// middleware for all the routes
+// converts all the json to js object and add to Api req
 
+app.post("/signup", async (req, res) => {
+  // console.log(req.body);
+
+  // Creating new instance of User model
+  const user = new User(req.body);
   try {
     // and saving user to db
     // creating a new document in User collection in devTinder DB
     await user.save();
     // returns a promise so must use async/await
-
     res.send("Added user successfully");
   } catch (err) {
     // console.error(err);
