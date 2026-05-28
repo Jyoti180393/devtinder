@@ -12,3 +12,5 @@ For tracking the feature and work updates for the project
 - Explore the concept of next()
 - Explored middlewares
 - created auth middleware for /admin and /user
+- Insatlled Mongoose
+- Connect Database ,added schema and model and data to DB

@@ -1,44 +1,46 @@
-const express = require("express");
-// const { adminAuth, userAuth } = require("./middleware/auth");
+// bypass your computer's default internet provider (ISP) router settings
+// and talk directly to Cloudflare's public DNS servers
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-// creating a server with express instance
+const express = require("express");
+const connectDb = require("./config/database");
 
 const app = express();
+const User = require("./models/user");
 
-app.use("/", (err, req, res, next) => {
-  console.error("Error from .use ", err);
-  res.status(500).send("Internal Server Error " + err.message);
-});
-// if the / case is placed at first it will not handle the error
-// in the /admin route handler because the / case will be matched
-// first and it will not call the next middleware or route handler
+app.post("/signup", async (req, res) => {
+  const userObj = {
+    firstName: "Jyoti",
+    lastName: "Pokharia",
+    email: "Jyoti@gmail.com",
+    password: "Jyoti@123",
+    age: 30,
+    gender: "Female",
+  };
 
-app.get("/admin", (req, res) => {
-  // can handle the error in the route handler itself
-  // with try catch block
+  const user = new User(userObj);
+
   try {
-    console.log("Admin route handler use is called");
-    throw new Error("New error");
+    // Creating new instance of User model and saving user to db
+    await user.save();
+    // returns a promise so must use async/await
 
-    res.send("Admin route handler get response");
-  } catch (error) {
-    console.error("Error in admin route handler:", error);
-    res.status(500).send("Internal Server Error from route handler");
-    // with .status() method we can set the status code of the response
-    // and with .send() method we can send the response to the client
+    res.send("Added user successfully");
+  } catch (err) {
+    // console.error(err);
+    res.status(400).send("Error while adding");
   }
 });
 
-// should handle the fallback case at last because
-// it will match all the routes and if we place it at first
-//  then it will not call the next middleware or route handler
-app.use("/admin", (err, req, res, next) => {
-  console.error("Error from .use ", err);
-  res.status(500).send("Internal Server Error " + err.message);
-});
-
-// request listener to listen to the request on port 7777
-app.listen(7777, () => {
-  // callback function to run when the server starts
-  console.log("Server is running on port 7777");
-});
+// connecting to db and then listening to server
+connectDb()
+  .then(() => {
+    console.log("NamasteDB cluster connected");
+    app.listen(7777, () => {
+      console.log("Server is running on port 7777");
+    });
+  })
+  .catch((err) => {
+    console.error(err);
+  });
