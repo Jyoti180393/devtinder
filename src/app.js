@@ -18,11 +18,12 @@ app.post("/signup", async (req, res) => {
     age: 30,
     gender: "Female",
   };
-
+  // Creating new instance of User model
   const user = new User(userObj);
 
   try {
-    // Creating new instance of User model and saving user to db
+    // and saving user to db
+    // creating a new document in User collection in devTinder DB
     await user.save();
     // returns a promise so must use async/await
 
