@@ -18,3 +18,4 @@ For tracking the feature and work updates for the project
 - Added Get API - /user with findOne({}) with email
 - Added Get API - /feed to get all users with find({})
 - Added Delete API - /user to delete user with id
+- Added Patch API - /user to update documents with id and email

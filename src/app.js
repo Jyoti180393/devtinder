@@ -60,6 +60,38 @@ app.delete("/user", async (req, res) => {
   }
 });
 
+// update user by id
+app.patch("/user", async (req, res) => {
+  const userId = req.body.userId;
+  const data = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(userId, data, {
+      returnDocument: "",
+    });
+    console.log(user);
+    res.send("User updated with id");
+  } catch (err) {
+    res.status(400).send("somthing went wrong");
+  }
+});
+
+// update user by email
+app.patch("/user", async (req, res) => {
+  try {
+    const data = await User.findOneAndUpdate(
+      { email: req.body.email },
+      req.body,
+      { lean: true },
+    );
+    console.log(data);
+    res.send("User Updated with email");
+  } catch (err) {
+    res.status(400).send("somthing went wrong");
+  }
+});
+
+// signup api (get all the users)
 app.post("/signup", async (req, res) => {
   // Creating new instance of User model
   const user = new User(req.body);
