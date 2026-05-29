@@ -46,6 +46,20 @@ app.get("/feed", async (req, res) => {
   }
 });
 
+// delele user
+app.delete("/user", async (req, res) => {
+  const userId = req.body.userId;
+
+  try {
+    // await User.findByIdAndDelete(userId);
+    await User.findOneAndDelete({ _id: userId });
+
+    res.send("User deleted succesfully");
+  } catch (err) {
+    res.status(400).send("somthing went wrong");
+  }
+});
+
 app.post("/signup", async (req, res) => {
   // Creating new instance of User model
   const user = new User(req.body);

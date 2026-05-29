@@ -14,6 +14,7 @@ For tracking the feature and work updates for the project
 - created auth middleware for /admin and /user
 - Insatlled Mongoose
 - Connect Database ,added schema and model and data to DB
-- Added API - post api with dynamic data (req.body data )
-- Added API - Get /user with findOne({}) with email
-- Added API - Get /feed to get all users with find({})
+- Added postAPI - /signup with dynamic data (req.body data )
+- Added Get API - /user with findOne({}) with email
+- Added Get API - /feed to get all users with find({})
+- Added Delete API - /user to delete user with id
