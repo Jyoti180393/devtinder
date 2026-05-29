@@ -13,9 +13,40 @@ app.use(express.json());
 // middleware for all the routes
 // converts all the json to js object and add to Api req
 
-app.post("/signup", async (req, res) => {
-  // console.log(req.body);
+// find a user with email with findOne
+app.get("/user", async (req, res) => {
+  const userEmail = req.body.email;
+  console.log(userEmail);
 
+  try {
+    const user = await User.findOne({ email: userEmail });
+    // return data as object
+    if (!user) {
+      res.status(404).send("User not found");
+    } else {
+      res.send("Found the user " + user);
+    }
+  } catch (err) {
+    res.status(400).send("Soming went wrong");
+  }
+});
+
+// get all the users
+app.get("/feed", async (req, res) => {
+  try {
+    const users = await User.find({});
+    // if any key is given it will return the all the documents matching that key
+    if (users.length) {
+      res.send(users);
+    } else {
+      res.status(404).send("No user found");
+    }
+  } catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+});
+
+app.post("/signup", async (req, res) => {
   // Creating new instance of User model
   const user = new User(req.body);
   try {
