@@ -68,11 +68,12 @@ app.patch("/user", async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(userId, data, {
       returnDocument: "",
+      runValidators: true,
     });
     console.log(user);
-    res.send("User updated with id");
+    res.send("User updated with id" + user);
   } catch (err) {
-    res.status(400).send("somthing went wrong");
+    res.status(400).send("somthing went wrong: " + err.message);
   }
 });
 
@@ -103,7 +104,7 @@ app.post("/signup", async (req, res) => {
     res.send("Added user successfully");
   } catch (err) {
     // console.error(err);
-    res.status(400).send("Error while adding");
+    res.status(400).send("Error while adding" + err.message);
   }
 });
 
