@@ -27,3 +27,4 @@ For tracking the feature and work updates for the project
 - Added Validation to User Schema requires, default, unique, lowercase, min, minlength etc.
 - Created custom validate function
 - Added timestamp to User Schema
+- Api level validations
