@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema(
   {
@@ -20,10 +21,20 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Email id is not valid");
+        }
+      },
     },
     password: {
       type: String,
       required: true,
+      validate(value) {
+        if (!validator.isStrongPassword(value)) {
+          throw new Error("Password is not strong");
+        }
+      },
     },
     age: {
       type: Number,
@@ -51,6 +62,11 @@ const userSchema = new mongoose.Schema(
     photoUrl: {
       type: String,
       deafult: "https://placehold.net/avatar.png",
+      validate(value) {
+        if (!validator.isURL(value)) {
+          throw new Error("URL is not valid");
+        }
+      },
     },
   },
   {
