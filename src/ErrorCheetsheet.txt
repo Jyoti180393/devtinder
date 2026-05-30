@@ -1,0 +1,75 @@
+// https://devhints.io/http-status
+// https://www.webfx.com/web-development/glossary/
+
+Client Error Responses
+400	Bad Request : means the server cannot process the request 
+                  because it contains invalid syntax or another type of client-side error.
+
+401	Unauthorized : means the request cannot be completed 
+                   because valid authentication credentials are required to access the resource.
+402	Payment Required :
+403	Forbidden :
+
+404	Not Found : error message that occurs when what was requested could not be found.
+                Broken or dead links often cause this.
+
+405	Method Not Allowed :
+406	Not Acceptable :
+407	Proxy Authentication Required :
+408	Request Timeout :
+409	Conflict :
+410	Gone :
+411	Length Required :
+412	Precondition Failed :
+413	Payload Too Large :
+414	URI Too Long :
+415	Unsupported Media Type :
+416	Range Not Satisfiable :
+417	Expectation Failed :
+418	I’m a teapot :
+421	Misdirected Request :
+426	Upgrade Required :
+428	Precondition Required :
+429	Too Many Requests :
+431	Request Header Fields Too Large :
+451	Unavailable For Legal Reasons :
+
+---------------------------------------
+Success Responses
+
+200	OK : means the request was successful and the server returned the requested resource or response.
+
+201	Created : means the request was successful and the server created one or more new resources as a result.
+
+202	Accepted : means the server has accepted the request for processing,
+               but the process has not been completed yet and may or may not be completed later.
+
+203	Non-Authoritive Information :
+204	No Content :
+205	Reset Content :
+206	Partial Content :
+226	IM Used :
+
+--------------------------
+Server Error Responses
+500	Internal Server Error : means the server encountered an unexpected condition 
+                            that prevented it from fulfilling the request.
+
+501	Not Implemented : means the server does not support the functionality 
+                      or request method needed to fulfill the request.
+
+502	Bad Gateway : means the server, while acting as a gateway or proxy,
+                  received an invalid response from an upstream server.
+                  
+503	Service Unavailable :
+504	Gateway Timeout :
+505	HTTP Version Not Supported :
+506	Variant Also Negotiates :
+510	Not Extended :
+511	Network Authentication Required :
+
+-----------------------------
+
+Informational Responses
+100	Continue :
+101	Switching Protocols :

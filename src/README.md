@@ -32,3 +32,5 @@ For tracking the feature and work updates for the project
 - Validate data in Signup API
 - Install bcrypt pkg
 - Create passwordHash using bcrypt.hash & save the user is excrupted password
+- Create login API
+- Compare passwords and throw error if email and password are invalid

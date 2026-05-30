@@ -5,6 +5,7 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const express = require("express");
 const bcrypt = require("bcrypt");
+const validator = require("validator");
 const connectDb = require("./config/database");
 const { signUpValidation } = require("./utils/validations");
 
@@ -93,7 +94,6 @@ app.patch("/user", async (req, res) => {
       req.body,
       { lean: true },
     );
-    console.log(data);
     res.send("User Updated with email");
   } catch (err) {
     res.status(400).send("somthing went wrong");
@@ -116,7 +116,7 @@ app.post("/signup", async (req, res) => {
       firstName,
       lastName,
       email,
-      password,
+      password: encryptPwd,
       age,
       gender,
     });
@@ -126,6 +126,33 @@ app.post("/signup", async (req, res) => {
     res.send("Added user successfully");
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
+  }
+});
+
+// login api
+app.post("/login", async (req, res) => {
+  // validating the email
+  const { email, password } = req.body;
+
+  try {
+    // validate email format
+    const isValidEmail = validator.isEmail(email);
+    if (!isValidEmail) res.status(422).send("Email is not valid");
+
+    // check if email is present in User collection
+    const user = await User.findOne({ email: email });
+    if (!user) res.status(401).send("Invalid credentials");
+
+    // check if the password entered and password in db for the user matches or not
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (isPasswordCorrect) {
+      res.send("Login successfully");
+    } else {
+      res.status(401).send("Invalid credentials");
+    }
+  } catch (err) {
+    throw new Error("ERROR: " + err.message);
   }
 });
 
