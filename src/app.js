@@ -4,7 +4,9 @@ const dns = require("dns");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const express = require("express");
+const bcrypt = require("bcrypt");
 const connectDb = require("./config/database");
+const { signUpValidation } = require("./utils/validations");
 
 const app = express();
 const User = require("./models/user");
@@ -16,7 +18,6 @@ app.use(express.json());
 // find a user with email with findOne
 app.get("/user", async (req, res) => {
   const userEmail = req.body.email;
-  console.log(userEmail);
 
   try {
     const user = await User.findOne({ email: userEmail });
@@ -78,7 +79,6 @@ app.patch("/user/:userId", async (req, res) => {
       returnDocument: "after",
       runValidators: true,
     });
-    // console.log(user);
     res.send("User updated with id" + user);
   } catch (err) {
     res.status(400).send("somthing went wrong: " + err.message);
@@ -102,17 +102,30 @@ app.patch("/user", async (req, res) => {
 
 // signup api (get all the users)
 app.post("/signup", async (req, res) => {
-  // Creating new instance of User model
-  const user = new User(req.body);
   try {
-    // and saving user to db
-    // creating a new document in User collection in devTinder DB
+    // Validate the data
+    signUpValidation(req);
+
+    // extracted required fields from req.body
+    const { firstName, lastName, email, password, age, gender } = req.body;
+
+    // encrypt the password
+    const encryptPwd = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password,
+      age,
+      gender,
+    });
+
+    // creating a new document ->  in User collection -> devTinder DB
     await user.save();
-    // returns a promise so must use async/await
     res.send("Added user successfully");
   } catch (err) {
-    // console.error(err);
-    res.status(400).send("Error while adding" + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 

@@ -28,3 +28,7 @@ For tracking the feature and work updates for the project
 - Created custom validate function
 - Added timestamp to User Schema
 - Api level validations
+
+- Validate data in Signup API
+- Install bcrypt pkg
+- Create passwordHash using bcrypt.hash & save the user is excrupted password
