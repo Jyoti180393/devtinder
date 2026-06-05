@@ -34,3 +34,9 @@ For tracking the feature and work updates for the project
 - Create passwordHash using bcrypt.hash & save the user is excrupted password
 - Create login API
 - Compare passwords and throw error if email and password are invalid
+
+- install cookie parser and set dummy cookies (token inside it) in res
+- create GET / profile API and get the cookie -> token
+- install jsonwebtoken
+- in /login api after email and pwd validation create jwt and send it to user with cookies
+- read the cookies in /profile and get the details of logged in user

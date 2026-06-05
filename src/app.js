@@ -6,13 +6,17 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 const express = require("express");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+
 const connectDb = require("./config/database");
 const { signUpValidation } = require("./utils/validations");
-
-const app = express();
 const User = require("./models/user");
 
+const app = express();
+
 app.use(express.json());
+app.use(cookieParser());
 // middleware for all the routes
 // converts all the json to js object and add to Api req
 
@@ -129,6 +133,28 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.get("/profile", async (req, res) => {
+  try {
+    const { token } = req.cookies;
+
+    if (!token) {
+      throw new Error("Please login again");
+    }
+
+    const tokenData = await jwt.verify(token, "keyTO?unlock_Token");
+    const { _id } = tokenData;
+    const user = await User.findById(_id);
+
+    if (!user) {
+      throw new Error("user not found");
+    } else {
+      res.send(user);
+    }
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
 // login api
 app.post("/login", async (req, res) => {
   // validating the email
@@ -147,6 +173,9 @@ app.post("/login", async (req, res) => {
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (isPasswordCorrect) {
+      const token = await jwt.sign({ _id: user._id }, "keyTO?unlock_Token");
+
+      res.cookie("token", token);
       res.send("Login successfully");
     } else {
       res.status(401).send("Invalid credentials");
