@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
@@ -73,5 +75,30 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+userSchema.methods.getJWT = async function () {
+  const user = this;
+  // here this is referring to the user document for which we are generating the token
+
+  const token = await jwt.sign({ _id: user._id }, "keyTO?unlock_Token", {
+    expiresIn: 10,
+  });
+  // token will expire in 10 sec
+
+  return token;
+};
+
+// check if the password entered and password in db for the user matches or not
+
+userSchema.methods.validateEnteredPassword = async function (enteredPassword) {
+  const user = this;
+
+  const isPasswordMatching = await bcrypt.compare(
+    enteredPassword,
+    user.password,
+  );
+  // the order should not
+  return isPasswordMatching;
+};
 
 module.exports = mongoose.model("User", userSchema);

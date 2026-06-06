@@ -40,3 +40,8 @@ For tracking the feature and work updates for the project
 - install jsonwebtoken
 - in /login api after email and pwd validation create jwt and send it to user with cookies
 - read the cookies in /profile and get the details of logged in user
+- user Auth middleware and add it profile API
+- add new post Api /sendConnectionRequest
+- set the expiry of jwt token and cookies
+- Create userSchema methods to getJWT() and validateEnteredPassword()
+- Use the userSchema methods back in respective request handler
