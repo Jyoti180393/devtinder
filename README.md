@@ -45,3 +45,7 @@ For tracking the feature and work updates for the project
 - set the expiry of jwt token and cookies
 - Create userSchema methods to getJWT() and validateEnteredPassword()
 - Use the userSchema methods back in respective request handler
+
+- Listed all the API's and grouped them in respective routers
+- Create routes folder for managing auth , profile, request router
+- Create respective routers and import these router in app.js
