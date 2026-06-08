@@ -7,7 +7,7 @@ const { signUpValidation } = require("../utils/validations");
 const User = require("../models/user");
 const validator = require("validator");
 
-// signup api (get all the users)
+// signup api
 router.post("/signup", async (req, res) => {
   try {
     // Validate the data
@@ -44,13 +44,18 @@ router.post("/login", async (req, res) => {
   try {
     // validate email format
     const isValidEmail = validator.isEmail(email);
-    if (!isValidEmail) res.status(422).send("Email is not valid");
+    if (!isValidEmail) throw new Error("Email is not valid");
 
     // check if email is present in User collection
     const user = await User.findOne({ email: email });
-    if (!user) res.status(401).send("Invalid credentials");
 
-    const isPasswordCorrect = user.validateEnteredPassword(password);
+    if (!user) {
+      return res.status(401).send("Invalid credentials");
+      // if we are not trowing error we should return from here
+      //  to avoid executing the rest of the code
+    }
+
+    const isPasswordCorrect = await user.validateEnteredPassword(password);
 
     if (isPasswordCorrect) {
       const token = await user.getJWT();
@@ -67,6 +72,16 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     throw new Error("ERROR: " + err.message);
   }
+});
+
+//logout
+router.post("/logout", async (req, res) => {
+  res
+    .cookie("token", null, { expires: new Date(Date.now()) })
+    .send("Logout successfully");
+  // clearing the token cookie by setting it to null and expiring it immediately
+  // chaining the cookie method with send method to send the response
+  //  after clearing the cookie
 });
 
 module.exports = router;

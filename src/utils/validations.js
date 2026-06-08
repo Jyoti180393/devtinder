@@ -13,6 +13,22 @@ const signUpValidation = (req) => {
   // can write validate logic .isEmail and .isStrongPassword here also
 };
 
+const validateUserData = (req) => {
+  const allowdedFields = [
+    "firstName",
+    "lastName",
+    "age",
+    "gender",
+    "skills",
+    "about",
+    "photoUrl",
+    "securityQuestion",
+    "securityAnswer",
+  ];
+  return Object.keys(req.body).every((field) => allowdedFields.includes(field));
+};
+
 module.exports = {
   signUpValidation,
+  validateUserData,
 };

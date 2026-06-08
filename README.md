@@ -49,3 +49,6 @@ For tracking the feature and work updates for the project
 - Listed all the API's and grouped them in respective routers
 - Create routes folder for managing auth , profile, request router
 - Create respective routers and import these router in app.js
+- Create post API /logout
+- Create patch API / profile/edit, /profile/password/reset and /profile/password/forgot
+- Validation for patch data
