@@ -60,3 +60,6 @@ For tracking the feature and work updates for the project
 - added index and compound index in db
 
 - POST /request/review/:status/:requestId Api with corner cases and validation
+- GET /user/request/recieved API with validation and filters in userRouter
+- Created connection between User and ConncetionRequest Collection with ref
+- GET /user/connection with validation and populate chain

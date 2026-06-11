@@ -68,13 +68,12 @@ router.post(
       if (!allowedStatus.includes(status)) {
         return res.status(400).send("Status is not valid");
       }
-      console.log(loggedInUser._id, status);
+
       const connectionRequest = await ConnectionRequest.findOne({
         _id: requestId,
         toUserId: loggedInUser._id,
         status: "interested",
       });
-      console.log(connectionRequest);
 
       if (!connectionRequest) {
         return res

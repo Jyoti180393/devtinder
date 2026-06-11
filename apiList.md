@@ -24,7 +24,7 @@ POST /request/review/:status/:toUserId
 
 ## userRouter
 
-GET /user/connection
+GET /user/connections
 GET /user/request/recieved
 GET /feed - Gets you the profile of other user on the paltform
 
