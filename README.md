@@ -52,3 +52,9 @@ For tracking the feature and work updates for the project
 - Create post API /logout
 - Create patch API / profile/edit, /profile/password/reset and /profile/password/forgot
 - Validation for patch data
+
+- Connection request schema add validation to it
+- sendConnectRequest Api wil corner cases
+- $or and $and for db query and more logical query in mongodb
+- schema.validator .pre("save") function
+- added index and compound index in db
