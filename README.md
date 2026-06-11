@@ -54,7 +54,9 @@ For tracking the feature and work updates for the project
 - Validation for patch data
 
 - Connection request schema add validation to it
-- sendConnectRequest Api wil corner cases
+- POST /request/send/:status/:toUserId Api with corner cases
 - $or and $and for db query and more logical query in mongodb
 - schema.validator .pre("save") function
 - added index and compound index in db
+
+- POST /request/review/:status/:requestId Api with corner cases and validation

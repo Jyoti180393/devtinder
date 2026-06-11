@@ -14,10 +14,13 @@ PATCH /profile/password
 
 ## connectionRequestRouter
 
-POST /request/send/intrested/:userId
-POST /request/send/ignore/:userId
-POST /request/review/accepted/:requestId
-POST /request/review/rejected/:requestId
+### senderEnd
+
+POST /request/send/:status/:toUserId
+
+### reciverEnd
+
+POST /request/review/:status/:toUserId
 
 ## userRouter
 

@@ -7,55 +7,89 @@ const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 
 //sendConnectionRequest
+router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
+  try {
+    const { status, toUserId } = req.params;
+    const fromUserId = req.user._id;
+
+    const allowdedStatus = ["ignored", "interested"];
+
+    // check status is valid or nor
+    const isvalidStatus = allowdedStatus.includes(status);
+    if (!isvalidStatus) throw new Error("Status is not valid");
+
+    // fincd the toUser data
+    const toUser = await User.findById(toUserId);
+    if (!toUser) throw new Error("User not found");
+
+    // to check if the connection request already exists
+    const exsistingRequest = await ConnectionRequest.findOne({
+      $or: [
+        { fromUserId, toUserId },
+        {
+          fromUserId: toUserId,
+          toUserId: fromUserId,
+        },
+      ],
+    });
+
+    if (exsistingRequest)
+      return res.status(400).send("Connection request already exists");
+
+    const connectionRequest = new ConnectionRequest({
+      fromUserId,
+      toUserId,
+      status,
+    });
+    const data = await connectionRequest.save();
+
+    const fromUser = await req.user;
+    let responseMessage;
+    if (status === "interested") {
+      responseMessage = " has sent connection request to ";
+    } else if (status === "ignored") {
+      responseMessage = " has ignored connection request of ";
+    }
+    res.send(fromUser.firstName + responseMessage + toUser.firstName);
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
 router.post(
-  "/sendConnectionRequest/:status/:toUserId",
+  "/request/review/:status/:requestId",
   userAuth,
   async (req, res) => {
     try {
-      const { status, toUserId } = req.params;
-      const fromUserId = req.user._id;
+      const loggedInUser = req.user;
+      const { status, requestId } = req.params;
 
-      const allowdedStatus = ["ignored", "interested"];
-
-      // check status is valid or nor
-      const isvalidStatus = allowdedStatus.includes(status);
-      if (!isvalidStatus) throw new Error("Status is not valid");
-
-      // fincd the toUser data
-      const toUser = await User.findById(toUserId);
-      if (!toUser) throw new Error("User not found");
-
-      // to check if the connection request already exists
-      const exsistingRequest = await ConnectionRequest.findOne({
-        $or: [
-          { fromUserId, toUserId },
-          {
-            fromUserId: toUserId,
-            toUserId: fromUserId,
-          },
-        ],
-      });
-
-      if (exsistingRequest)
-        return res.status(400).send("Connection request already exists");
-
-      const connectionRequest = new ConnectionRequest({
-        fromUserId,
-        toUserId,
-        status,
-      });
-      const data = await connectionRequest.save();
-
-      const fromUser = await req.user;
-      let message;
-      if (status === "interested") {
-        message = " has sent connection request to ";
-      } else if (status === "ignored") {
-        message = " has ignored connection request of ";
+      const allowedStatus = ["accepted", "rejected"];
+      if (!allowedStatus.includes(status)) {
+        return res.status(400).send("Status is not valid");
       }
-      res.send(fromUser.firstName + message + toUser.firstName);
+      console.log(loggedInUser._id, status);
+      const connectionRequest = await ConnectionRequest.findOne({
+        _id: requestId,
+        toUserId: loggedInUser._id,
+        status: "interested",
+      });
+      console.log(connectionRequest);
+
+      if (!connectionRequest) {
+        return res
+          .status(404)
+          .json({ message: "Connection request not found" });
+      }
+
+      connectionRequest.status = status;
+      const data = await connectionRequest.save();
+      res.json({
+        message: `You have ${status} connection request. `,
+        data,
+      });
     } catch (err) {
-      res.status(400).send("ERROR: " + err.message);
+      throw new Error("ERROR: " + err.message);
     }
   },
 );
