@@ -14,7 +14,16 @@ router.post("/signup", async (req, res) => {
     signUpValidation(req);
 
     // extracted required fields from req.body
-    const { firstName, lastName, email, password, age, gender } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      age,
+      gender,
+      securityQuestion,
+      securityAnswer,
+    } = req.body;
 
     // encrypt the password
     const encryptPwd = await bcrypt.hash(password, 10);
@@ -26,13 +35,15 @@ router.post("/signup", async (req, res) => {
       password: encryptPwd,
       age,
       gender,
+      securityQuestion,
+      securityAnswer,
     });
 
     // creating a new document ->  in User collection -> devTinder DB
     await user.save();
     res.send("Added user successfully");
   } catch (err) {
-    res.status(400).send("ERROR: " + err.message);
+    res.status(400).send("ERROR: " + err);
   }
 });
 

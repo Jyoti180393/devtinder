@@ -6,7 +6,7 @@ const { userAuth } = require("../middleware/auth");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 
-//sendConnectionRequest
+//send ConnectionRequest
 router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
   try {
     const { status, toUserId } = req.params;
@@ -56,6 +56,7 @@ router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
   }
 });
 
+//review Connectionrequets
 router.post(
   "/request/review/:status/:requestId",
   userAuth,
@@ -73,7 +74,7 @@ router.post(
         _id: requestId,
         toUserId: loggedInUser._id,
         status: "interested",
-      });
+      }).populate("fromUserId", "firstName");
 
       if (!connectionRequest) {
         return res
@@ -84,7 +85,7 @@ router.post(
       connectionRequest.status = status;
       const data = await connectionRequest.save();
       res.json({
-        message: `You have ${status} connection request. `,
+        message: `You have ${status} connection request from ${data.fromUserId.firstName} `,
         data,
       });
     } catch (err) {

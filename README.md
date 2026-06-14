@@ -63,3 +63,5 @@ For tracking the feature and work updates for the project
 - GET /user/request/recieved API with validation and filters in userRouter
 - Created connection between User and ConncetionRequest Collection with ref
 - GET /user/connection with validation and populate chain
+
+- GET /feed API explored select $nin $ne $and query operators

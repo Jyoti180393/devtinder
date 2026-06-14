@@ -1,5 +1,14 @@
 const signUpValidation = (req) => {
-  const { firstName, lastName, email, password, age, gender } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    age,
+    gender,
+    securityQuestion,
+    securityAnswer,
+  } = req.body;
 
   if (!firstName || !lastName) {
     throw new Error("Must enter first and last name");
@@ -9,6 +18,12 @@ const signUpValidation = (req) => {
     throw new Error("Gender is required");
   } else if (!email) {
     throw new Error("Email is missing");
+  } else if (!password) {
+    throw new Error("Password is required");
+  } else if (!securityQuestion) {
+    throw new Error("Security question is required");
+  } else if (!securityAnswer) {
+    throw new Error("Security answer is required");
   }
   // can write validate logic .isEmail and .isStrongPassword here also
 };
