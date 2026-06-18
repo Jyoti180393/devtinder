@@ -5,7 +5,7 @@ const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     if (!token) {
-      throw new Error("Please login again token is not valid");
+      return res.status(401).send("Please login again token is not valid");
     }
     const tokenData = await jwt.verify(token, "keyTO?unlock_Token", {
       expiresIn: "1h",

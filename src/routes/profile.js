@@ -12,7 +12,7 @@ router.get("/profile/view", userAuth, async (req, res) => {
   try {
     const user = req.user;
 
-    res.send(user.firstName + " is logged in");
+    res.json({ message: user.firstName + " is logged in", data: user });
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }
