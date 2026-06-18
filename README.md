@@ -65,3 +65,5 @@ For tracking the feature and work updates for the project
 - GET /user/connection with validation and populate chain
 
 - GET /feed API explored select $nin $ne $and query operators
+
+- Install cors and whitelist FE url

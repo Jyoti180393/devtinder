@@ -76,9 +76,9 @@ router.post("/login", async (req, res) => {
       });
       // cookies will expire in 1 hour
 
-      res.send("Hello " + user.firstName);
+      res.json({ message: "Login Success " + user.firstName, data: user });
     } else {
-      res.status(401).send("Invalid credentials");
+      return res.status(401).send("Invalid credentials");
     }
   } catch (err) {
     throw new Error("ERROR: " + err.message);
