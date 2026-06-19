@@ -63,7 +63,6 @@ router.get("/user/feed", userAuth, async (req, res) => {
     let limit = parseInt(req.query.limit) || 10;
     limit = limit > 50 ? 50 : limit; // must check the limit
     const skip = (page - 1) * limit;
-    console.log(page, limit);
 
     // get all the users which have either send/recieved request from looggedInUser
     const connectionRequests = await ConnectionRequest.find({

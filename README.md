@@ -68,3 +68,5 @@ For tracking the feature and work updates for the project
 
 - Install cors and whitelist FE url
 - updating error and response of /profile/view
+
+- Fix the TokenExpiredError error

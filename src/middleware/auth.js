@@ -10,7 +10,6 @@ const userAuth = async (req, res, next) => {
     const tokenData = await jwt.verify(token, "keyTO?unlock_Token", {
       expiresIn: "1h",
     });
-
     const { _id } = tokenData;
     const user = await User.findById(_id);
 
@@ -21,7 +20,11 @@ const userAuth = async (req, res, next) => {
       next();
     }
   } catch (err) {
-    res.status(400).send("ERROR: " + err.message);
+    // Check if token is expired
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).send("Token has expired. Please login again");
+    }
+    res.status(400).send("ERROR is : " + err.message);
   }
 };
 
