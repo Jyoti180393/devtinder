@@ -6,6 +6,7 @@ const { userAuth } = require("../middleware/auth");
 const { validateUserData } = require("../utils/validations");
 const User = require("../models/user");
 const validator = require("validator");
+const { editProfileValidation } = require("../utils/validations");
 
 // to view the profile
 router.get("/profile/view", userAuth, async (req, res) => {
@@ -31,6 +32,7 @@ router.patch("/profile/edit", userAuth, async (req, res) => {
     // looping through the request body and updating the logged in user data
     // with the new data sent in the request body
 
+    editProfileValidation(req);
     await loggedInUser.save();
     // before saving it will also validate the data as per the validation
     // rules defined in the user model schema

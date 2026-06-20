@@ -10,8 +10,8 @@ const signUpValidation = (req) => {
     securityAnswer,
   } = req.body;
 
-  if (!firstName || !lastName) {
-    throw new Error("Must enter first and last name");
+  if (!firstName) {
+    throw new Error("First name can't be empty");
   } else if (!age) {
     throw new Error("Age is required");
   } else if (!gender) {
@@ -28,6 +28,21 @@ const signUpValidation = (req) => {
   // can write validate logic .isEmail and .isStrongPassword here also
 };
 
+const editProfileValidation = (req) => {
+  const { firstName, lastName, age, gender, skills, about } = req.body;
+
+  if (
+    (firstName && firstName.length < 3) ||
+    (lastName && lastName.length < 3)
+  ) {
+    throw new Error("Minimum allowed length (3).");
+  } else if (skills && skills.length > 5) {
+    throw new Error("You can add upto 5 skills only");
+  } else if (about && about?.length > 200) {
+    throw new Error("About must be less than 500 words");
+  }
+};
+
 const validateUserData = (req) => {
   const allowdedFields = [
     "firstName",
@@ -37,8 +52,6 @@ const validateUserData = (req) => {
     "skills",
     "about",
     "photoUrl",
-    "securityQuestion",
-    "securityAnswer",
   ];
   return Object.keys(req.body).every((field) => allowdedFields.includes(field));
 };
@@ -46,4 +59,5 @@ const validateUserData = (req) => {
 module.exports = {
   signUpValidation,
   validateUserData,
+  editProfileValidation,
 };
