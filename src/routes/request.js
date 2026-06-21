@@ -50,7 +50,10 @@ router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
     } else if (status === "ignored") {
       responseMessage = " has ignored connection request of ";
     }
-    res.send(fromUser.firstName + responseMessage + toUser.firstName);
+    res.json({
+      message: fromUser.firstName + responseMessage + toUser.firstName,
+      data,
+    });
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }

@@ -70,3 +70,4 @@ For tracking the feature and work updates for the project
 - updating error and response of /profile/view
 
 - Fix the TokenExpiredError error
+- Added validation while saving the edited profile
