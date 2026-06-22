@@ -24,7 +24,7 @@ const userAuth = async (req, res, next) => {
     if (err.name === "TokenExpiredError") {
       return res.status(401).send("Token has expired. Please login again");
     }
-    res.status(400).send("ERROR is : " + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 };
 

@@ -21,6 +21,7 @@ router.post("/signup", async (req, res) => {
       password,
       age,
       gender,
+      about,
       securityQuestion,
       securityAnswer,
     } = req.body;
@@ -35,6 +36,7 @@ router.post("/signup", async (req, res) => {
       password: encryptPwd,
       age,
       gender,
+      about,
       securityQuestion,
       securityAnswer,
     });
@@ -48,7 +50,7 @@ router.post("/signup", async (req, res) => {
 
     res.json({ message: "Added user successfully", data: savedUser });
   } catch (err) {
-    res.status(400).send("ERROR: " + err);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 

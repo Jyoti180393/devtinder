@@ -90,8 +90,13 @@ const userSchema = new mongoose.Schema(
     securityAnswer: {
       type: String,
       required: true,
-      maxLength: 100,
+      maxLength: 20,
       lowercase: true,
+      validate(value) {
+        if (value.length > 50) {
+          throw Error("Security answer lengh should be less than 50");
+        }
+      },
     },
   },
   {
