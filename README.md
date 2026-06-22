@@ -71,3 +71,5 @@ For tracking the feature and work updates for the project
 
 - Fix the TokenExpiredError error
 - Added validation while saving the edited profile
+- Adding toekn in signup for logging in after successfull signup
+- fixed validation bug

@@ -38,7 +38,7 @@ const editProfileValidation = (req) => {
     throw new Error("Minimum allowed length (3).");
   } else if (skills && skills.length > 5) {
     throw new Error("You can add upto 5 skills only");
-  } else if (about && about?.length > 200) {
+  } else if (about && about?.length >= 500) {
     throw new Error("About must be less than 500 words");
   }
 };

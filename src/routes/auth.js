@@ -40,8 +40,13 @@ router.post("/signup", async (req, res) => {
     });
 
     // creating a new document ->  in User collection -> devTinder DB
-    await user.save();
-    res.send("Added user successfully");
+    const savedUser = await user.save();
+    const token = await savedUser.getJWT();
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 1 * 3600000),
+    });
+
+    res.json({ message: "Added user successfully", data: savedUser });
   } catch (err) {
     res.status(400).send("ERROR: " + err);
   }
@@ -76,7 +81,10 @@ router.post("/login", async (req, res) => {
       });
       // cookies will expire in 1 hour
 
-      res.json({ message: "Login Success " + user.firstName, data: user });
+      res.json({
+        message: user.firstName + " successfully logged in",
+        data: user,
+      });
     } else {
       return res.status(401).send("Invalid credentials");
     }
