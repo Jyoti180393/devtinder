@@ -108,7 +108,7 @@ userSchema.methods.getJWT = async function () {
   const user = this;
   // here this is referring to the user document for which we are generating the token
 
-  const token = await jwt.sign({ _id: user._id }, "keyTO?unlock_Token", {
+  const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: 600,
   });
   // token will expire in 60 sec
