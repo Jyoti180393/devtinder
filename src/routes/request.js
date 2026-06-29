@@ -5,6 +5,7 @@ const { userAuth } = require("../middleware/auth");
 
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
+const sendEmail = require("../utils/sendEmail");
 
 //send ConnectionRequest
 router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
@@ -43,13 +44,20 @@ router.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
     });
     const data = await connectionRequest.save();
 
-    const fromUser = await req.user;
+    const fromUser = req.user;
     let responseMessage;
     if (status === "interested") {
       responseMessage = " has sent connection request to ";
     } else if (status === "ignored") {
       responseMessage = " has ignored connection request of ";
     }
+
+    const emailRes = await sendEmail.run(
+      "Update: You have got a connection request.",
+      fromUser.firstName + responseMessage + toUser.firstName,
+    );
+    console.log(emailRes);
+
     res.json({
       message: fromUser.firstName + responseMessage + toUser.firstName,
       data,
