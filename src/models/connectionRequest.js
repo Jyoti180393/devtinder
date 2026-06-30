@@ -1,24 +1,29 @@
 const mongoose = require("mongoose");
 
-const connectionRequestSchema = new mongoose.Schema({
-  fromUserId: {
-    ref: "User", // create reference to User collection with respect to fromUserId
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  toUserId: {
-    ref: "User",
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: {
-      values: ["ignored", "interested", "accepted", "rejected"],
-      message: `{VALUE} is not supported`,
+const connectionRequestSchema = new mongoose.Schema(
+  {
+    fromUserId: {
+      ref: "User", // create reference to User collection with respect to fromUserId
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
+    toUserId: {
+      ref: "User",
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: {
+        values: ["ignored", "interested", "accepted", "rejected"],
+        message: `{VALUE} is not supported`,
+      },
     },
   },
-});
+  {
+    timestamps: true,
+  },
+);
 
 // to check if to and from user id are not same
 connectionRequestSchema.pre("save", async function () {

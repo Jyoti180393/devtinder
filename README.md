@@ -73,3 +73,16 @@ For tracking the feature and work updates for the project
 - Added validation while saving the edited profile
 - Adding toekn in signup for logging in after successfull signup
 - fixed validation bug
+
+## Scheduling cron jobs in NodeJs
+
+- Installing node-corn
+- Add cronJob file in utils and add code from docs
+- Import cornJOb file in app.js
+- Learning about cron expression syntax - crontab.guru
+- Scheduled a job for sending email to user for all the connection request recieved last day
+- install date-fns
+- Find all unique email who have got the connection request
+- Send email with subject and body
+- Explore Queue mechanish to send bulk emails
+- Amazon SES Bulk Emails and bee-queue and bull npm packages

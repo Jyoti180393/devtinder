@@ -30,7 +30,7 @@
     }
 
 - Save the file either by CTL + O the CTL + X or CTL + X the editor will ask: Save modified buffer?
-- Restart the nginx -> sudo syatemctl restart nginx
+- Restart the nginx -> sudo systemctl restart nginx
 - Edit the base Url in FE application and push code to github and pull from interface cmd
 - Then again run the build command and copy code from devtinder/dist file to /var/www/html/
 - sudo scp -r dist/\* /var/www/html/
