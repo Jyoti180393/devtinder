@@ -33,8 +33,8 @@
 - Restart the nginx -> sudo systemctl restart nginx
 - Edit the base Url in FE application and push code to github
 - Pull code from github in aws interface cmd
-- Then again run the build command and copy code from devtinder/dist file to /var/www/html/
-- sudo scp -r dist/\* /var/www/html/
+- Then again run the build command and if any package is install run npm install in /devTinder directory
+- Then start the server with pm2 restart <servername> || <serverNumber-from-the-list>
 
 ## Seting email ciew AWS SES
 
