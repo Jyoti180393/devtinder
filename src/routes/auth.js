@@ -62,7 +62,7 @@ router.post("/login", async (req, res) => {
   try {
     // validate email format
     const isValidEmail = validator.isEmail(email);
-    if (!isValidEmail) throw new Error("Email is not valid");
+    if (!isValidEmail) return res.status(401).send("Email is not valid");
 
     // check if email is present in User collection
     const user = await User.findOne({ email: email });
