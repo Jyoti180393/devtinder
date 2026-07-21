@@ -55,22 +55,48 @@ router.post("/payment/webhook", async (req, res) => {
     const webhookBody = req.body;
     const webhookSignature = req.get("X-Razorpay-Signature");
 
+    console.log("[Payment Webhook] Received webhook", {
+      event: webhookBody?.event,
+      orderId: webhookBody?.payload?.entity?.order_id,
+      status: webhookBody?.payload?.entity?.status,
+    });
+
     const isWebhookValid = validateWebhookSignature(
       JSON.stringify(webhookBody),
       webhookSignature,
       process.env.RAZORPAY_WEBHOOK_KEY,
     );
+
+    console.log(
+      "[Payment Webhook] Signature validation result",
+      isWebhookValid,
+    );
+
     if (!isWebhookValid) {
+      console.warn("[Payment Webhook] Invalid signature received");
       return res.status(400).send("Invalid Webhook");
     }
 
     const paymentDetails = req.body.payload.entity;
 
     const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
+    if (!payment) {
+      console.warn(
+        "[Payment Webhook] Payment not found for order",
+        paymentDetails.order_id,
+      );
+      return res.status(404).send("Payment not found");
+    }
+
     payment.status = paymentDetails.status;
     await payment.save();
 
     const user = await User.findOne({ _id: payment.userId });
+    if (!user) {
+      console.warn("[Payment Webhook] User not found for payment", payment._id);
+      return res.status(404).send("User not found");
+    }
+
     user.isPremium = true;
     user.membershipType = paymentDetails.notes.membershipType;
     // set date as per membership type, for gold
@@ -82,12 +108,21 @@ router.post("/payment/webhook", async (req, res) => {
           60 *
           1000,
     );
-    // set expiry date to 30 days from now
-    console.log("user.membershipExpiryDate", user.membershipExpiryDate);
+    console.log(
+      "[Payment Webhook] User membership expiry",
+      user.membershipExpiryDate,
+    );
     await user.save();
+
+    console.log("[Payment Webhook] Webhook processed successfully", {
+      orderId: paymentDetails.order_id,
+      status: paymentDetails.status,
+      userId: user._id,
+    });
 
     return res.status(200).send("Webhook recieved successfully ");
   } catch (err) {
+    console.error("[Payment Webhook] Error processing webhook", err);
     res.status(400).send("ERROR: " + err.message);
   }
 });
