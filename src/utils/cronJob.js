@@ -36,3 +36,8 @@ cron.schedule("0 11 * * *", async () => {
     console.log("Cron job error" + err);
   }
 });
+
+// corn job is to schedule any task to run at a specific time or interval.
+// In this case, the cron job is scheduled to run every day at 11:00 AM.
+// It checks for connection requests that were created yesterday and have a status of "interested".
+// It then sends an email notification to the users who have pending connection requests.

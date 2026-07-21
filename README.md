@@ -86,3 +86,25 @@ For tracking the feature and work updates for the project
 - Send email with subject and body
 - Explore Queue mechanish to send bulk emails
 - Amazon SES Bulk Emails and bee-queue and bull npm packages
+
+## RazorPay Payment Gateway Integration
+
+- Signup for RazorPay and get the API Key and Secret
+- Add RazorPay npm package to the project
+- Add key and secret in .env file
+- Initialized RazorPay instance in razorpay.js file
+- Created API and schema for Payment collection
+- Created POST /payment/create-order API to create order and send it to FE
+- Saved the order details in Payment collection
+- Make the API dynamic with userId, membershipType and amount
+- Send API key to FE for RazorPay checkout dialog box
+- Once the order is created, send the order details to FE and use it in RazorPay checkout dialog box
+- Setup razorpay webhook to listen for payment success and failure events
+- Set up the Url https://dev-tinder.com/pament/webhook and select payment.events in razorpay dashboard
+- Add Secret key in .env file and verify the webhook signature in the webhook API
+- Create API /payment/webhook and verify webhook signature
+- Get the orderId from the webhook payload and update the Payment collection with payment details
+- Update payment status in Payment collection
+- Update the User schema with premium, membershipType and membershipExpiryDate
+- Update the User collection with premium membership details once the payment is successful
+- Deploy the changes to the server and test the payment flow in production
