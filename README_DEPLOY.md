@@ -35,6 +35,8 @@
 - Pull code from github in aws interface cmd
 - Then again run the build command and if any package is install run npm install in /devTinder directory
 - Then start the server with pm2 restart <servername> || <serverNumber-from-the-list>
+- To edit the env file in aws instance -> sudo nano .env
+- To exit the env file editor -> CTL + X and then Y to save the changes
 
 ## Seting email ciew AWS SES
 
