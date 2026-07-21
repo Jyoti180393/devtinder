@@ -52,48 +52,68 @@ router.post("/payment/create-order", userAuth, async (req, res) => {
 
 router.post("/payment/webhook", async (req, res) => {
   try {
-    console.log("Webhook body received:", req.body);
+    console.log("[Payment Webhook] Received webhook", req.body);
     const webhookSignature = req.get("X-Razorpay-Signature");
+    const webhookBody = JSON.stringify(req.body);
 
-    const isWebhookValid = await validateWebhookSignature(
-      JSON.stringify(req.body),
+    const isWebhookValid = validateWebhookSignature(
+      webhookBody,
       webhookSignature,
       process.env.RAZORPAY_WEBHOOK_KEY,
     );
 
-    if (!isWebhookValid) {
-      console.log("INvalid Webhook Signature");
-      return res.status(400).json({ msg: "Webhook signature is invalid" });
-    }
     console.log("Valid Webhook Signature");
 
-    // Udpate my payment Status in DB
+    if (!isWebhookValid) {
+      console.warn("[Payment Webhook] Invalid signature received");
+      return res.status(400).send("Invalid Webhook");
+    }
+
     const paymentDetails = req.body.payload.payment.entity;
 
-    const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
+    const payment = await Payment.findOne({
+      orderId: paymentDetails.order_id,
+    });
+    if (!payment) {
+      console.log("Payment not found for order");
+      return res.status(404).send("Payment not found");
+    }
+
     payment.status = paymentDetails.status;
     await payment.save();
-    console.log("Payment saved");
 
     const user = await User.findOne({ _id: payment.userId });
-    user.isPremium = true;
-    user.membershipType = payment.notes.membershipType;
-    console.log("User saved");
+    if (!user) {
+      console.log("[Payment Webhook] User not found for payment", payment._id);
+      return res.status(404).send("User not found");
+    }
 
+    user.isPremium = true;
+    user.membershipType = paymentDetails.notes.membershipType;
+    user.membershipExpiryDate = new Date(
+      Date.now() +
+        membershipDuration[paymentDetails.notes.membershipType] *
+          24 *
+          60 *
+          60 *
+          1000,
+    );
+    console.log(
+      "[Payment Webhook] User membership expiry",
+      user.membershipExpiryDate,
+    );
     await user.save();
 
-    // Update the user as premium
+    console.log("[Payment Webhook] Webhook processed successfully", {
+      orderId: paymentDetails.order_id,
+      status: paymentDetails.status,
+      userId: user._id,
+    });
 
-    // if (req.body.event == "payment.captured") {
-    // }
-    // if (req.body.event == "payment.failed") {
-    // }
-
-    // return success response to razorpay
-
-    return res.status(200).json({ msg: "Webhook received successfully" });
+    return res.status(200).send("Webhook recieved successfully ");
   } catch (err) {
-    return res.status(500).json({ msg: err.message });
+    console.error("[Payment Webhook] Error processing webhook", err);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
