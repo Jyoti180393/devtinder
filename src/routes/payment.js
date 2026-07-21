@@ -64,7 +64,7 @@ router.post("/payment/webhook", async (req, res) => {
       return res.status(400).send("Invalid Webhook");
     }
 
-    const paymentDetails = res.body.payload.entity;
+    const paymentDetails = req.body.payload.entity;
 
     const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
     payment.status = paymentDetails.status;
