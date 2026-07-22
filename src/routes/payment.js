@@ -62,7 +62,7 @@ router.post("/payment/webhook", async (req, res) => {
       process.env.RAZORPAY_WEBHOOK_KEY,
     );
 
-    console.log("Valid Webhook Signature");
+    console.log("[Payment Webhook] Valid Webhook Signature");
 
     if (!isWebhookValid) {
       console.warn("[Payment Webhook] Invalid signature received");
@@ -74,8 +74,12 @@ router.post("/payment/webhook", async (req, res) => {
     const payment = await Payment.findOne({
       orderId: paymentDetails.order_id,
     });
+
     if (!payment) {
-      console.log("Payment not found for order");
+      console.log(
+        "[Payment Webhook] Payment not found for order",
+        paymentDetails.order_id,
+      );
       return res.status(404).send("Payment not found");
     }
 
@@ -88,23 +92,21 @@ router.post("/payment/webhook", async (req, res) => {
       return res.status(404).send("User not found");
     }
 
+    const expiryDate = new Date();
+    const monthsToAdd = membershipDuration[paymentDetails.notes.membershipType];
+    expiryDate.setMonth(expiryDate.getMonth() + monthsToAdd);
+
     user.isPremium = true;
     user.membershipType = paymentDetails.notes.membershipType;
-    user.membershipExpiryDate = new Date(
-      Date.now() +
-        membershipDuration[paymentDetails.notes.membershipType] *
-          24 *
-          60 *
-          60 *
-          1000,
-    );
+    user.membershipExpiryDate = expiryDate;
+
     console.log(
       "[Payment Webhook] User membership expiry",
-      user.membershipExpiryDate,
+      user.membershipExpiryDate.toISOString(),
     );
-    await user.save();
 
-    console.log("[Payment Webhook] Webhook processed successfully", {
+    await user.save();
+    console.log("[Payment Webhook] User data updated successfully", {
       orderId: paymentDetails.order_id,
       status: paymentDetails.status,
       userId: user._id,
