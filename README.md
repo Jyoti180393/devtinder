@@ -100,7 +100,7 @@ For tracking the feature and work updates for the project
 - Send API key to FE for RazorPay checkout dialog box
 - Once the order is created, send the order details to FE and use it in RazorPay checkout dialog box
 - Setup razorpay webhook to listen for payment success and failure events
-- Set up the Url https://dev-tinder.com/pament/webhook and select payment.events in razorpay dashboard
+- Set up the Url https://dev-tinder.com/payment/webhook and select payment.events in razorpay dashboard
 - Add Secret key in .env file and verify the webhook signature in the webhook API
 - Create API /payment/webhook and verify webhook signature
 - Get the orderId from the webhook payload and update the Payment collection with payment details
@@ -108,3 +108,5 @@ For tracking the feature and work updates for the project
 - Update the User schema with premium, membershipType and membershipExpiryDate
 - Update the User collection with premium membership details once the payment is successful
 - Deploy the changes to the server and test the payment flow in production
+- Add an API: /premium/verify which Fe will call after the payment is successful
+- Same Api can be called to check if the user is premium or not
