@@ -11,6 +11,11 @@ const userAuth = async (req, res, next) => {
       expiresIn: "1h",
     });
     const { _id } = tokenData;
+
+    // exp from tokenData is in seconds, so we multiply by 1000 to convert it to milliseconds
+    // const expiryTime = Number(tokenData.exp) * 1000;
+    // console.log("Token expires at:", new Date(expiryTime).toISOString());
+
     const user = await User.findById(_id);
 
     if (!user) {
