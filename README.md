@@ -110,3 +110,12 @@ For tracking the feature and work updates for the project
 - Deploy the changes to the server and test the payment flow in production
 - Add an API: /premium/verify which Fe will call after the payment is successful
 - Same Api can be called to check if the user is premium or not
+
+## Chat feature with server.io
+
+- Install server.io library
+- Include the http and create a server with the app
+- Add a socket file to initilize the socket
+- Create a io instance and listen for connection with io.on();
+- Add the socket instance to the server and listen for events like 'joinChat', 'sendMessage' and 'disconnect'
+- Include the socket instance in the app.js and call the initializeSocket function with the server instance

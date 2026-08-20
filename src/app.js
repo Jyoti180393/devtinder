@@ -14,8 +14,10 @@ const userRouter = require("./routes/user");
 const paymentRouter = require("./routes/payment");
 const cors = require("cors");
 const app = express();
+const http = require("http");
 
 require("./utils/cronJob");
+const initializeSocket = require("./utils/socket");
 
 app.use(
   cors({
@@ -23,6 +25,11 @@ app.use(
     credentials: true,
   }),
 );
+
+// creating a server
+const server = http.createServer(app);
+initializeSocket(server);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -36,7 +43,7 @@ app.use("/", paymentRouter);
 connectDb()
   .then(() => {
     console.log("NamasteDB cluster connected");
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
       console.log("Server is running on port " + process.env.PORT);
     });
   })
