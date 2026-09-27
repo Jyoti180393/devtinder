@@ -119,3 +119,8 @@ For tracking the feature and work updates for the project
 - Create a io instance and listen for connection with io.on();
 - Add the socket instance to the server and listen for events like 'joinChat', 'sendMessage' and 'disconnect'
 - Include the socket instance in the app.js and call the initializeSocket function with the server instance
+- Now after the soket event is emitted from the FE, the server will listen for the event and emit the response back to the FE
+- Add the socket instance to the server and listen for events like 'joinChat', 'sendMessage' and 'disconnect'
+- Add roomId to the joinChat event and join the room with socket.join(roomId)
+- Add the sendMessage event to listen for messages and emit the message to the room with io.to(roomId).emit('message', data)
+- Emit receiveMessage event to the FE with the message data
