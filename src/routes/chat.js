@@ -3,12 +3,32 @@ const router = express.Router();
 
 const { userAuth } = require("../middleware/auth");
 const Chat = require("../models/chat");
+const ConnectionRequest = require("../models/connectionRequest");
 
 // to get the chat history of the logged in user
 router.get("/chat/:targetUserId", userAuth, async (req, res) => {
   try {
     const { targetUserId } = req.params;
     const userId = req.user._id;
+
+    const connectionRequest = await ConnectionRequest.find({
+      $or: [
+        {
+          toUserId: userId,
+          fromUserId: targetUserId,
+          status: "accepted",
+        },
+        {
+          toUserId: targetUserId,
+          fromUserId: userId,
+          status: "accepted",
+        },
+      ],
+    });
+    if (!connectionRequest || connectionRequest.length === 0) {
+      console.log("No connection request found between users");
+      return res.status(400).send("No connection request found between users");
+    }
 
     let chat = await Chat.findOne({
       participants: { $all: [userId, targetUserId] },
