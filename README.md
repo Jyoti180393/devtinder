@@ -124,3 +124,5 @@ For tracking the feature and work updates for the project
 - Add roomId to the joinChat event and join the room with socket.join(roomId)
 - Add the sendMessage event to listen for messages and emit the message to the room with io.to(roomId).emit('message', data)
 - Emit receiveMessage event to the FE with the message data
+- Create database schema for messages and save the message to the database in the sendMessage event
+- Create API to get the chat history between two users with GET /chat/:targetUserId
