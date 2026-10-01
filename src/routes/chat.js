@@ -12,17 +12,10 @@ router.get("/chat/:targetUserId", userAuth, async (req, res) => {
     const userId = req.user._id;
 
     const connectionRequest = await ConnectionRequest.find({
+      status: "accepted",
       $or: [
-        {
-          toUserId: userId,
-          fromUserId: targetUserId,
-          status: "accepted",
-        },
-        {
-          toUserId: targetUserId,
-          fromUserId: userId,
-          status: "accepted",
-        },
+        { fromUserId: userId, toUserId: targetUserId },
+        { fromUserId: targetUserId, toUserId: userId },
       ],
     });
     if (!connectionRequest || connectionRequest.length === 0) {
@@ -38,7 +31,6 @@ router.get("/chat/:targetUserId", userAuth, async (req, res) => {
     });
 
     // path tells where to populate and select tells which fields to select from the populated document
-    console.log("chat history: ", chat);
 
     if (!chat) {
       chat = new Chat({
