@@ -14,6 +14,7 @@ const initializeSocket = (server) => {
 
   const Chat = require("../models/chat");
 
+  // authentication middleware for socket.io
   // const getTokenFromCookieHeader = (cookieHeader = "") => {
   //   const tokenCookie = cookieHeader
   //     .split(";")
@@ -72,6 +73,9 @@ const initializeSocket = (server) => {
 
   io.on("connection", (socket) => {
     socket.on("joinChat", async ({ userId, targetUserId } = {}) => {
+      // Fallback Default Value: The compiler added = {} at the end ({ ... } = {})
+      // to ensure that if the argument is undefined, it defaults to an empty object.
+      // This prevents runtime errors when destructuring properties from an undefined value.
       try {
         if (
           !targetUserId ||
@@ -98,18 +102,11 @@ const initializeSocket = (server) => {
         sendAt,
       } = {}) => {
         try {
-          s;
-          if (
-            !targetUserId ||
-            typeof text !== "string" ||
-            !text.trim() ||
-            !(await hasAcceptedConnection(userId, targetUserId))
-          ) {
+          if (!targetUserId || typeof text !== "string" || !text.trim()) {
             return rejectChatAction(socket);
           }
 
           const roomId = getSecretRoomId(userId.toString(), targetUserId);
-          socket.join(roomId);
 
           let chat = await Chat.findOne({
             participants: { $all: [userId, targetUserId] },
