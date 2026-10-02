@@ -126,3 +126,19 @@ For tracking the feature and work updates for the project
 - Emit receiveMessage event to the FE with the message data
 - Create database schema for messages and save the message to the database in the sendMessage event
 - Create API to get the chat history between two users with GET /chat/:targetUserId
+
+## Seting email ciew AWS SES
+
+- Login to Amazon console
+- Go to IAM and create user (user deatils -> Set permissions select -> (Attach policies directly ->
+  and in Permissions policies select(AmazonSESFullAccess ))) then Create user
+- Select Amazon SES -> view setuppage
+- Create identity with domain name , verify by domain name
+- Select Verify Domain with "Easy DKIM" and DKIM signing key length as "RSA_1024_BIT" values and Create identity
+- Setup DNS records in cloudeflare DNS records which are copied from AWS public DNS (with CNAME)
+- Verify any email address with Amazon SES -> Identities
+- Install aws-sdk v3
+- Go to Amazon SES examples using SDK for JavaScript (v3) -> SendEmail
+- Create a SESclient in utils add the code
+- Create sesEmail in utils folder add the code
+- Add code to send email when request is send

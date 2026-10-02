@@ -1,19 +1,21 @@
 ## Deployement BE
 
+- Update the base url to "/api"
 - setup AWS instance
 - Backend
-- install dependencies in devTinder directory
-- allow e2cinstance public IP on mongoDB server
-- npm install pm2 -g
-- pm2 start npm -- start
-- pm2 logs, pl2 lsit, pm2 flsuh <name>, pm2 stop <name>, pm2 delete <name>
-- creating process with custom name -> pm2 start npm --name "devTinder-BE" -- start
-- Enable port :7777 from AWS instance -> security -> security group
+  - install dependencies in devTinder directory
+  - Create a .env file and push all the env variables : <nano .env>
+  - Add EC2 instance public IP on mongoDB server network access list
+  - Intall pm2 globally <npm install pm2 -g>
+  - Start project via pm2 : <pm2 start npm -- start> or with custom name <pm2 start npm --name "devTinder-BE" -- start>
+  - Some command for pm2: <pm2 logs>, <pm2 list>, <pm2 flsuh <name-of-server>>, <pm2 stop <name>>, <pm2 delete <name>>
+  - creating process with custom name -> pm2 start npm --name "devTinder-BE" -- start
+  - Enable port :7777 from AWS EC2 instance -> security -> security group
 - To fix the mismatch domain we have to use nginx proxy-pass
 - Get the config from internet "nginx proxy pass /api to 7777 node application"
-- Edit the nginx config file -> sudo nano /etc/nginx/sites-available/default
-- Chnage the server name to 13.53.124.61
-- Then copy paste the below config
+- Edit the nginx config file: <sudo nano /etc/nginx/sites-available/default>
+- Change the server_name to the public IP of the AWS instance
+- Then copy paste the below server_name
 
 # New Node.js API Proxy block
 
@@ -29,27 +31,11 @@
         proxy_cache_bypass $http_upgrade;
     }
 
-- Save the file either by CTL + O the CTL + X or CTL + X the editor will ask: Save modified buffer?
-- Restart the nginx -> sudo systemctl restart nginx
+- Save the config file either by CTL + O the CTL + X or CTL + X the editor will ask: Save modified buffer?
+- Restart the nginx -> <sudo systemctl restart nginx>
 - Edit the base Url in FE application and push code to github
 - Pull code from github in aws interface cmd
 - Then again run the build command and if any package is install run npm install in /devTinder directory
 - Then start the server with pm2 restart <servername> || <serverNumber-from-the-list>
 - To edit the env file in aws instance -> sudo nano .env
 - To exit the env file editor -> CTL + X and then Y to save the changes
-
-## Seting email ciew AWS SES
-
-- Login to Amazon console
-- Go to IAM and create user (user deatils -> Set permissions select -> (Attach policies directly ->
-  and in Permissions policies select(AmazonSESFullAccess ))) then Create user
-- Select Amazon SES -> view setuppage
-- Create identity with domain name , verify by domain name
-- Select Verify Domain with "Easy DKIM" and DKIM signing key length as "RSA_1024_BIT" values and Create identity
-- Setup DNS records in cloudeflare DNS records which are copied from AWS public DNS (with CNAME)
-- Verify any email address with Amazon SES -> Identities
-- Install aws-sdk v3
-- Go to Amazon SES examples using SDK for JavaScript (v3) -> SendEmail
-- Create a SESclient in utils add the code
-- Create sesEmail in utils folder add the code
-- Add code to send email when request is send
